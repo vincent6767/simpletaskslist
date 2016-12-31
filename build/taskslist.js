@@ -21390,16 +21390,24 @@ var NewTaskForm = React.createClass({
     var inputValue = event.target.value;
     this.setInputValue(inputValue);
   },
-  handleFormSubmit: function (event) {
-    event.preventDefault();
-
+  onAddNewTask: function () {
     var taskName = this.state.inputValue;
 
     if (!taskName) {
-      // this.props.handleOnError('Task name is not allowed to be empty');
       ErrorActionCreator.addErrorMessages(['Task name is not allowed to be empty']);
     } else {
       TaskActionCreators.addNewTask(taskName);
+    }
+    this.setInputValue('');
+  },
+  handleFormSubmit: function (event) {
+    event.preventDefault();
+
+    this.onAddNewTask();
+  },
+  handleOnKeydown: function (event) {
+    if (event.keyCode == 13) {
+      this.handleFormSubmit(event);
     }
   },
   render: function () {
@@ -21412,7 +21420,7 @@ var NewTaskForm = React.createClass({
         React.createElement(
           Label,
           { text: 'New Task Name: ', type: 'textfield' },
-          React.createElement(Textfield, { handleInputValueChange: this.handleInputValueChange, name: 'newTaskName', initialValue: this.state.inputValue })
+          React.createElement(Textfield, { handleInputValueChange: this.handleInputValueChange, handleOnKeydown: this.handleOnKeydown, name: 'newTaskName', initialValue: this.state.inputValue })
         )
       ),
       React.createElement(Button, { text: 'Add', type: 'button', handleClick: this.handleFormSubmit })
@@ -21561,6 +21569,7 @@ var Textfield = React.createClass({
 
   propTypes: {
     handleInputValueChange: React.PropTypes.func,
+    handleOnKeydown: React.PropTypes.func,
     inputValue: React.PropTypes.string
   },
   handleOnChange: function (event) {
@@ -21570,8 +21579,13 @@ var Textfield = React.createClass({
       handleInputValueChange(event);
     }
   },
+  handleOnKeydown: function (event) {
+    if (this.props.handleOnKeydown) {
+      this.props.handleOnKeydown(event);
+    }
+  },
   render: function () {
-    return React.createElement('input', { type: 'textfield', style: textFieldStyle, className: 'form-control', name: this.props.name, value: this.props.inputValue, onChange: this.handleOnChange });
+    return React.createElement('input', { type: 'textfield', style: textFieldStyle, className: 'form-control', name: this.props.name, value: this.props.inputValue, onChange: this.handleOnChange, onKeyDown: this.handleOnKeydown });
   }
 });
 

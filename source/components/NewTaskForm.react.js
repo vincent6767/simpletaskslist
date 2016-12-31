@@ -20,23 +20,31 @@ var NewTaskForm = React.createClass({
     var inputValue = event.target.value;
     this.setInputValue(inputValue);
   },
-  handleFormSubmit: function(event) {
-    event.preventDefault();
-
+  onAddNewTask: function() {
     var taskName = this.state.inputValue;
 
     if (!taskName) {
-      // this.props.handleOnError('Task name is not allowed to be empty');
       ErrorActionCreator.addErrorMessages(['Task name is not allowed to be empty']);
     } else {
       TaskActionCreators.addNewTask(taskName);
+    }
+    this.setInputValue('');
+  },
+  handleFormSubmit: function(event) {
+    event.preventDefault();
+
+    this.onAddNewTask();
+  },
+  handleOnKeydown: function(event) {
+    if (event.keyCode == 13) {
+      this.handleFormSubmit(event);
     }
   },
   render: function() {
     return (
       <form className="form-inline" id="new-task-form">
         <div className="form-group">
-          <Label text="New Task Name: " type="textfield"><Textfield handleInputValueChange={this.handleInputValueChange} name="newTaskName" initialValue={this.state.inputValue} /></Label>
+          <Label text="New Task Name: " type="textfield"><Textfield handleInputValueChange={this.handleInputValueChange} handleOnKeydown={this.handleOnKeydown} name="newTaskName" initialValue={this.state.inputValue} /></Label>
         </div>
         <Button text="Add" type="button" handleClick={this.handleFormSubmit}/>
       </form>
