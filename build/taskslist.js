@@ -21151,7 +21151,7 @@ var Button = React.createClass({
   displayName: 'Button',
 
   propTypes: {
-    handleFormSubmit: React.PropTypes.func
+    handleClick: React.PropTypes.func
   },
   getDefaultProps: function () {
     return {
@@ -21160,10 +21160,10 @@ var Button = React.createClass({
     };
   },
   handleOnClick: function (event) {
-    var handleFormSubmit = this.props.handleFormSubmit;
+    var handleClick = this.props.handleClick;
 
-    if (handleFormSubmit) {
-      handleFormSubmit(event);
+    if (handleClick) {
+      handleClick(event);
     }
   },
   render: function () {
@@ -21181,10 +21181,6 @@ module.exports = Button;
 var React = require('react');
 var Label = require('./Label.react');
 
-var strikeStyle = {
-  fontStyle: 'italic'
-};
-
 var Checkbox = React.createClass({
   displayName: 'Checkbox',
 
@@ -21195,8 +21191,8 @@ var Checkbox = React.createClass({
     var element;
     if (this.props.isComplete) {
       element = React.createElement(
-        'strike',
-        { style: strikeStyle },
+        'span',
+        { className: 'strike-out' },
         React.createElement(
           Label,
           { text: this.props.labelText, type: 'checkbox' },
@@ -21419,7 +21415,7 @@ var NewTaskForm = React.createClass({
           React.createElement(Textfield, { handleInputValueChange: this.handleInputValueChange, name: 'newTaskName', initialValue: this.state.inputValue })
         )
       ),
-      React.createElement(Button, { text: 'Add', type: 'button', handleFormSubmit: this.handleFormSubmit })
+      React.createElement(Button, { text: 'Add', type: 'button', handleClick: this.handleFormSubmit })
     );
   }
 });
@@ -21485,7 +21481,7 @@ var Task = React.createClass({
       React.createElement(
         'div',
         { className: 'col-md-10 col-12' },
-        React.createElement(Button, { text: 'X', handleFormSubmit: this.handleClick })
+        React.createElement(Button, { text: 'X', handleClick: this.handleClick })
       )
     );
   }
